@@ -1,25 +1,12 @@
-# Screenshots for README
+# Screenshots
 
-Add your images here so they appear on the main [README](../../README.md) for **ResumeChecker**.
+These images are used in the root [README](../../README.md).
 
-## Required files
-
-| Filename | What to capture |
-|----------|-----------------|
-| `home.png` | Full home / landing page after load |
-| `upload-match.png` | Upload tab with JD + resume + match score visible |
-| `compare.png` | Compare tab with at least one version and chart |
-| `versions.png` | Versions tab with a version selected |
-
-## Tips
-
-- **Width:** 1200–1400px looks best on GitHub  
-- **Format:** PNG or JPG  
-- **Browser:** Hide bookmarks bar; use a consistent window size  
-- After adding files, commit and push:
-
-```bash
-git add docs/screenshots/
-git commit -m "Add README screenshots"
-git push origin main
-```
+| File | Screen |
+|------|--------|
+| `home.png` | Home / landing |
+| `upload-form.png` | Upload tab — JD + resume file |
+| `upload-match.png` | Upload tab — match score results |
+| `upload-analysis.png` | Upload tab — section breakdown & suggestions |
+| `compare.png` | Compare tab |
+| `versions.png` | Versions tab |

@@ -25,28 +25,35 @@ The frontend runs as a standalone demo today; a FastAPI + MongoDB backend is inc
 
 ## Screenshots
 
-Place images in `docs/screenshots/` using the filenames below.
-
-| Screen | File | Description |
-|--------|------|-------------|
-| Home | `home.png` | Landing page |
-| Upload | `upload-match.png` | Job description, resume upload, match score |
-| Compare | `compare.png` | Version comparison chart |
-| Versions | `versions.png` | Version list and detail view |
-
 ### Home
+
+Landing page with quick access to all tools.
 
 ![Home](./docs/screenshots/home.png)
 
-### Upload — resume vs. job description
+### Upload — job description & resume
 
-![Upload and match](./docs/screenshots/upload-match.png)
+Paste the JD and upload your resume before running the match.
 
-### Compare
+![Upload form](./docs/screenshots/upload-form.png)
+
+### Upload — match score & analysis
+
+Overall match percentage, section breakdown, and improvement suggestions.
+
+![Match results](./docs/screenshots/upload-match.png)
+
+![Detailed analysis](./docs/screenshots/upload-analysis.png)
+
+### Compare — multiple resume versions
+
+Upload versions, score each file, and compare side by side.
 
 ![Compare versions](./docs/screenshots/compare.png)
 
-### Versions
+### Versions — library & details
+
+Browse saved versions and open section-level feedback.
 
 ![Version library](./docs/screenshots/versions.png)
 
