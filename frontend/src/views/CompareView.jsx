@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 import FileUpload from '../components/FileUpload/FileUpload';
 import VersionChart from '../components/VersionChart/VersionChart';
+import TabGuide from '../components/TabGuide/TabGuide';
 
 const CompareView = () => {
   const [resumeVersions, setResumeVersions] = useState([]);
+  const [pendingFile, setPendingFile] = useState(null);
+  const [uploadKey, setUploadKey] = useState(0);
   const [isComparing, setIsComparing] = useState(false);
+  const [formError, setFormError] = useState('');
 
-  const handleVersionUpload = async (file, versionName) => {
+  const handleAddVersion = async () => {
+    if (!pendingFile) {
+      setFormError('Upload a resume file first.');
+      return;
+    }
+
+    setFormError('');
     setIsComparing(true);
+
     try {
-      // Simulate API call for resume analysis
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock analysis results for comparison
+
       const mockAnalysis = {
         id: Date.now(),
-        name: versionName || `Version ${resumeVersions.length + 1}`,
-        file: file.name,
-        overallScore: Math.floor(Math.random() * 30) + 70, // Random score between 70-100
+        name: `Version ${resumeVersions.length + 1}`,
+        file: pendingFile.name,
+        overallScore: Math.floor(Math.random() * 30) + 70,
         sections: {
           content: { score: Math.floor(Math.random() * 30) + 70 },
           formatting: { score: Math.floor(Math.random() * 30) + 70 },
@@ -26,10 +35,13 @@ const CompareView = () => {
         },
         uploadDate: new Date().toISOString()
       };
-      
+
       setResumeVersions(prev => [...prev, mockAnalysis]);
+      setPendingFile(null);
+      setUploadKey((k) => k + 1);
     } catch (error) {
       console.error('Analysis failed:', error);
+      setFormError('Could not add version. Try again.');
     } finally {
       setIsComparing(false);
     }
@@ -39,38 +51,72 @@ const CompareView = () => {
     setResumeVersions(prev => prev.filter(version => version.id !== id));
   };
 
+  const canAdd = pendingFile && !isComparing;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 pt-16">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 pt-16 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <TabGuide
+          title="Compare tab"
+          purpose="See which resume version scores highest side by side."
+          steps={[
+            'Upload one resume file in the box on the left.',
+            'Click the green “Add version & score” button.',
+            'Repeat for each version you want to compare (e.g. old vs new resume).',
+            'Check the chart on the right for scores and section breakdown.',
+          ]}
+          result="A ranked comparison of overall scores. Versions you add stay in this tab when you navigate away and return."
+        />
+
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Compare Resume Versions
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Upload multiple versions of your resume to compare scores and identify the best performing version.
+            Upload multiple resumes, score each one, then compare results in the chart.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Section */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                Upload New Version
+                Add a version
               </h2>
-              <FileUpload 
-                onFileUpload={handleVersionUpload}
+              <FileUpload
+                key={uploadKey}
+                onFileSelected={(file) => {
+                  setPendingFile(file);
+                  if (formError) setFormError('');
+                }}
                 isAnalyzing={isComparing}
-                allowMultiple={true}
-                placeholder="Upload resume version..."
+                placeholder="Upload resume version…"
               />
+
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={handleAddVersion}
+                  disabled={!canAdd}
+                  className="w-full sm:w-auto px-8 py-3 bg-green-600 text-white text-base font-semibold rounded-xl shadow-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  {isComparing ? 'Scoring…' : 'Add version & score'}
+                </button>
+                {formError && (
+                  <p className="mt-2 text-sm text-red-600">{formError}</p>
+                )}
+                {!formError && !pendingFile && (
+                  <p className="mt-2 text-sm text-gray-500">
+                    Upload a file, then click the button above.
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* Version List */}
             {resumeVersions.length > 0 && (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Uploaded Versions ({resumeVersions.length})
+                  Your versions ({resumeVersions.length})
                 </h3>
                 <div className="space-y-3">
                   {resumeVersions.map((version) => (
@@ -78,21 +124,18 @@ const CompareView = () => {
                       <div>
                         <p className="font-medium text-gray-900">{version.name}</p>
                         <p className="text-sm text-gray-500">{version.file}</p>
-                        <p className="text-xs text-gray-400">
-                          {new Date(version.uploadDate).toLocaleDateString()}
-                        </p>
                       </div>
                       <div className="flex items-center space-x-3">
                         <span className="text-lg font-bold text-blue-600">
                           {version.overallScore}%
                         </span>
                         <button
+                          type="button"
                           onClick={() => removeVersion(version.id)}
-                          className="text-red-500 hover:text-red-700 transition-colors"
+                          className="px-3 py-1 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50"
+                          title="Remove version"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                          Remove
                         </button>
                       </div>
                     </div>
@@ -102,42 +145,24 @@ const CompareView = () => {
             )}
           </div>
 
-          {/* Comparison Chart */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 min-h-[320px]">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Comparison Results
+              Comparison chart
             </h2>
             {resumeVersions.length > 0 ? (
               <VersionChart versions={resumeVersions} />
             ) : (
               <div className="text-center py-12">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No versions to compare</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Upload at least one resume version to see comparison results.
+                <p className="text-gray-500 text-sm max-w-xs mx-auto">
+                  No versions yet. Upload a resume and click “Add version & score” to fill this chart.
                 </p>
               </div>
             )}
           </div>
         </div>
-
-        {/* Loading State */}
-        {isComparing && (
-          <div className="text-center py-8">
-            <div className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-green-600 transition ease-in-out duration-150">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Analyzing resume version...
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-export default CompareView; 
+export default CompareView;

@@ -1,6 +1,12 @@
 import React, { useState, useRef } from 'react';
 
-const FileUpload = ({ onFileUpload, isAnalyzing = false, allowMultiple = false, placeholder = "Upload your resume..." }) => {
+const FileUpload = ({
+  onFileUpload,
+  onFileSelected,
+  isAnalyzing = false,
+  allowMultiple = false,
+  placeholder = "Upload your resume...",
+}) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -30,7 +36,9 @@ const FileUpload = ({ onFileUpload, isAnalyzing = false, allowMultiple = false, 
   const handleFileSelect = (file) => {
     if (isValidFile(file)) {
       setSelectedFile(file);
-      if (onFileUpload) {
+      if (onFileSelected) {
+        onFileSelected(file);
+      } else if (onFileUpload) {
         onFileUpload(file);
       }
     }

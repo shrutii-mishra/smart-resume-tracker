@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import VersionChart from '../components/VersionChart/VersionChart';
+import TabGuide from '../components/TabGuide/TabGuide';
 
 const VersionsView = () => {
   const [versions, setVersions] = useState([]);
@@ -104,14 +105,25 @@ const VersionsView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 pt-16">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 pt-16 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <TabGuide
+          title="Versions tab"
+          purpose="Browse saved resume versions and open full details for any one."
+          steps={[
+            'Pick a version from the list on the left (sample versions load automatically).',
+            'Click “View details” on a card, or click anywhere on the card.',
+            'On the right, read section scores, feedback, and the comparison chart.',
+            'Use Remove on a card to delete a version from the list.',
+          ]}
+          result="Detailed breakdown per version plus a chart comparing all versions. Your selection stays when you switch tabs."
+        />
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Resume Versions
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Manage and track all your resume versions. Compare performance and identify your best version.
+            Select a version on the left to see scores and feedback on the right.
           </p>
         </div>
 
@@ -142,24 +154,30 @@ const VersionsView = () => {
                       </span>
                     </div>
                     <p className="text-sm text-gray-500 mb-2">{version.file}</p>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
                       <span className="text-lg font-bold text-purple-600">
                         {version.overallScore}%
                       </span>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs text-gray-400">
-                          {new Date(version.lastModified).toLocaleDateString()}
-                        </span>
+                      <div className="flex items-center gap-2">
                         <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleVersionSelect(version);
+                          }}
+                          className="px-3 py-1.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+                        >
+                          View details
+                        </button>
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             deleteVersion(version.id);
                           }}
-                          className="text-red-500 hover:text-red-700 transition-colors"
+                          className="px-3 py-1.5 text-sm text-red-600 border border-red-200 rounded-lg hover:bg-red-50"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                          Remove
                         </button>
                       </div>
                     </div>

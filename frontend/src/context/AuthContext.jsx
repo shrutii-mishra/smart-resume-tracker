@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
-  // Check if user is logged in on app start
+  // Optional: restore session if user signed in before (not required to use the app)
   useEffect(() => {
     const checkAuthStatus = () => {
       try {
@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('Error checking auth status:', error);
-        // Clear invalid data
         localStorage.removeItem('authToken');
         localStorage.removeItem('userData');
       } finally {

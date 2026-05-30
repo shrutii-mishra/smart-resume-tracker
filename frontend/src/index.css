@@ -1,5 +1,47 @@
 @import "tailwindcss";
 
+/*
+  Pastel pink theme — remap existing utility names (blue, purple, etc.)
+  so components keep the same classes and layout as the original clone.
+*/
+@theme {
+  /* Primary brand (was blue) */
+  --color-blue-50: #fff5f7;
+  --color-blue-100: #fce7f3;
+  --color-blue-400: #f9a8d4;
+  --color-blue-500: #f472b6;
+  --color-blue-600: #ec4899;
+  --color-blue-700: #db2777;
+  --color-blue-800: #9d174d;
+  --color-blue-900: #831843;
+
+  /* Page washes (was indigo) */
+  --color-indigo-50: #fff1f2;
+  --color-indigo-100: #ffe4e6;
+
+  /* Secondary accents (was purple) */
+  --color-purple-50: #fdf4ff;
+  --color-purple-100: #fae8ff;
+  --color-purple-500: #e879f9;
+  --color-purple-600: #d946ef;
+  --color-purple-700: #c026d3;
+
+  /* Alternate buttons / compare (was green) */
+  --color-green-50: #fff5f7;
+  --color-green-100: #fce7f3;
+  --color-green-500: #f9a8d4;
+  --color-green-600: #f472b6;
+  --color-green-700: #ec4899;
+
+  --color-emerald-50: #fff1f2;
+  --color-emerald-100: #ffe4e6;
+
+  /* Softer pinks where already used */
+  --color-pink-50: #fff5f7;
+  --color-pink-100: #fce7f3;
+  --color-pink-500: #f472b6;
+}
+
 /* Custom animation for mobile menu slide down */
 @keyframes slideDown {
   from {
@@ -14,4 +56,40 @@
 
 .animate-slideDown {
   animation: slideDown 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+.animate-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }

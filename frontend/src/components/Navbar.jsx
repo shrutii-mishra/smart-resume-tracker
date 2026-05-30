@@ -34,8 +34,8 @@ const Navbar = ({ onNavigate, currentView = 'home' }) => {
   };
 
   return (
-    <nav className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-8 flex items-center justify-between h-16">
+    <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200/80 fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-[4.25rem]">
         {/* Logo/Brand */}
         <div className="flex-shrink-0">
           <button 
@@ -47,56 +47,31 @@ const Navbar = ({ onNavigate, currentView = 'home' }) => {
         </div>
 
         {/* Desktop Navigation Menu */}
-        <div className="hidden md:flex items-center space-x-8 mx-8">
-          <button
-            onClick={() => handleNavigation('home')}
-            className={`font-medium text-sm transition-colors duration-300 relative group ${
-              isActive('home') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            Home
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
-              isActive('home') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </button>
-          <button
-            onClick={() => handleNavigation('upload')}
-            className={`font-medium text-sm transition-colors duration-300 relative group ${
-              isActive('upload') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            Upload Resume
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
-              isActive('upload') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </button>
-          <button
-            onClick={() => handleNavigation('compare')}
-            className={`font-medium text-sm transition-colors duration-300 relative group ${
-              isActive('compare') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            Compare
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
-              isActive('compare') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </button>
-          <button
-            onClick={() => handleNavigation('versions')}
-            className={`font-medium text-sm transition-colors duration-300 relative group ${
-              isActive('versions') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            Versions
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-300 ${
-              isActive('versions') ? 'w-full' : 'w-0 group-hover:w-full'
-            }`}></span>
-          </button>
+        <div className="hidden md:flex items-center gap-1 mx-4 lg:mx-8 p-1 bg-gray-100/80 rounded-xl">
+          {[
+            { view: 'home', label: 'Home' },
+            { view: 'upload', label: 'Upload', title: 'Match resume to a job description' },
+            { view: 'compare', label: 'Compare', title: 'Compare multiple resume versions' },
+            { view: 'versions', label: 'Versions', title: 'Browse saved resume versions' },
+          ].map(({ view, label, title }) => (
+            <button
+              key={view}
+              onClick={() => handleNavigation(view)}
+              title={title}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive(view)
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/60'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        {/* User Actions */}
+        {/* User menu — only if already signed in from a previous session */}
         <div className="hidden md:flex items-center space-4">
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <div className="relative">
               <button
                 onClick={toggleUserMenu}
@@ -137,21 +112,6 @@ const Navbar = ({ onNavigate, currentView = 'home' }) => {
                 </div>
               )}
             </div>
-          ) : (
-            <>
-              <button
-                onClick={() => handleNavigation('auth')}
-                className="px-5 py-2 text-gray-700 bg-transparent border border-gray-300 rounded-lg font-medium text-sm hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 transform hover:-translate-y-0.5"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => handleNavigation('auth')}
-                className="px-5 py-2 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-600/30"
-              >
-                Get Started
-              </button>
-            </>
           )}
         </div>
 
@@ -199,8 +159,8 @@ const Navbar = ({ onNavigate, currentView = 'home' }) => {
             Versions
           </button>
           
+          {isAuthenticated && (
           <div className="pt-4 border-t border-gray-200 space-y-3">
-            {isAuthenticated ? (
               <>
                 <div className="flex items-center space-x-3 py-2">
                   <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
@@ -229,23 +189,8 @@ const Navbar = ({ onNavigate, currentView = 'home' }) => {
                   Sign out
                 </button>
               </>
-            ) : (
-              <>
-                <button
-                  onClick={() => handleNavigation('auth')}
-                  className="w-full px-5 py-2 text-gray-700 bg-transparent border border-gray-300 rounded-lg font-medium text-sm hover:bg-gray-50 hover:border-gray-400 transition-all duration-300"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => handleNavigation('auth')}
-                  className="w-full px-5 py-2 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 transition-all duration-300"
-                >
-                  Get Started
-                </button>
-              </>
-            )}
           </div>
+          )}
         </div>
       </div>
     </nav>
