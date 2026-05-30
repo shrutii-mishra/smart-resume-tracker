@@ -96,7 +96,7 @@ const UploadView = () => {
             Match Resume to Job Description
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            No sign-in required. Paste the job description, upload your resume, then click the button below.
+            Paste the job description, upload your resume, then click the button below.
           </p>
         </div>
 

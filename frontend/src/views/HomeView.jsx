@@ -40,17 +40,14 @@ const HomeView = ({ onNavigate }) => {
   return (
     <main className="flex-1 min-h-[calc(100dvh-4rem)] flex flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-16">
       <div className="w-full max-w-5xl mx-auto text-center">
-        <p className="animate-fade-in-up text-sm font-medium tracking-wide text-white/90 uppercase mb-3">
-          No sign-in required
-        </p>
-        <h1 className="animate-fade-in-up animate-delay-100 text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-sm">
+        <h1 className="animate-fade-in-up text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-sm">
           ResumeChecker
         </h1>
-        <p className="animate-fade-in-up animate-delay-200 text-lg sm:text-xl text-white/85 max-w-2xl mx-auto leading-relaxed">
-          Match your resume to any role, compare versions, and keep your work as you move between tabs.
+        <p className="animate-fade-in-up animate-delay-100 text-lg sm:text-xl text-white/85 max-w-2xl mx-auto leading-relaxed">
+          Align your resume with job descriptions, compare versions, and track improvements in one place.
         </p>
-        <p className="animate-fade-in-up animate-delay-300 text-sm text-white/70 mt-4">
-          Use the menu in the header, or pick a tool below
+        <p className="animate-fade-in-up animate-delay-200 text-sm text-white/70 mt-4">
+          Use the menu above, or choose a tool below
         </p>
       </div>
 

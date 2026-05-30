@@ -21,6 +21,15 @@ const AppContent = () => {
   const [currentView, setCurrentView] = React.useState('home');
   const { isAuthenticated, loading } = useAuth();
 
+  const handleNavigate = React.useCallback((view) => {
+    setCurrentView(view);
+    window.scrollTo(0, 0);
+  }, []);
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentView]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center">
@@ -39,11 +48,11 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex flex-col">
-      <Navbar onNavigate={setCurrentView} currentView={currentView} />
+      <Navbar onNavigate={handleNavigate} currentView={currentView} />
 
       {/* Keep all tabs mounted so your work is not lost when switching */}
       {viewPanel(currentView, 'home', (
-        <HomeView onNavigate={setCurrentView} />
+        <HomeView onNavigate={handleNavigate} />
       ))}
 
       {viewPanel(currentView, 'upload', <UploadView />)}
